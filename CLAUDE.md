@@ -1,6 +1,6 @@
-# OpenSpec and Superpowers Guide
+# SDD Eval
 
-Evaluation and demonstration project for the OpenSpec and Superpowers SDD workflow. Multi-language test apps for skill validation.
+SDD skill evaluation workspace — multi-language test apps for skill validation with behavior-based evidence collection.
 
 ## Project Structure
 

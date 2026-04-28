@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"openspec-superpowers-guide/evaluation/go/internal/handler"
-	"openspec-superpowers-guide/evaluation/go/internal/store"
+	"sdd-eval/evaluation/go/internal/handler"
+	"sdd-eval/evaluation/go/internal/store"
 )
 
 func main() {

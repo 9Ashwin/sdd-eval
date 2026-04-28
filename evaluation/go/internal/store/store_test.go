@@ -3,7 +3,7 @@ package store_test
 import (
 	"testing"
 
-	"openspec-superpowers-guide/evaluation/go/internal/store"
+	"sdd-eval/evaluation/go/internal/store"
 )
 
 func TestList_Empty(t *testing.T) {

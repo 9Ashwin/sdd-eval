@@ -1,3 +1,3 @@
-module openspec-superpowers-guide/evaluation/go
+module sdd-eval/evaluation/go
 
 go 1.26.2

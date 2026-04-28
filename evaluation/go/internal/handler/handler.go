@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"openspec-superpowers-guide/evaluation/go/internal/store"
+	"sdd-eval/evaluation/go/internal/store"
 )
 
 type Handler struct {
