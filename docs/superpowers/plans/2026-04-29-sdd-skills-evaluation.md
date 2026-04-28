@@ -8,6 +8,8 @@
 
 **RED phase isolation:** Before each RED dispatch, temporarily rename `CLAUDE.md` to `CLAUDE.md.disabled` so the agent does NOT see the sdd-workflow routing rule. Restore it before GREEN phase. This ensures RED agents have zero SDD skill exposure.
 
+**IMPORTANT — All commands run from the project root directory.** Do not `cd` to subdirectories; use paths relative to the project root.
+
 **Tech Stack:** Go 1.26+ (target app), Agent tool (subagent dispatch), file system diff (evidence collection).
 
 ---
@@ -44,7 +46,7 @@ mkdir -p evaluation/results/green/task-1 evaluation/results/green/task-2
 - [ ] **Step 2: Snapshot baseline — record the clean Go app state**
 
 ```bash
-cd evaluation/go && find . -type f | sort > ../../evaluation/results/baseline-before.txt
+find evaluation/go -type f | sort > evaluation/results/baseline-before.txt
 ```
 
 - [ ] **Step 3: Commit**
@@ -71,9 +73,8 @@ mv CLAUDE.md CLAUDE.md.disabled
 Agent prompt (self-contained, no skill references):
 
 ```
-You are a Go developer. The project is at:
+You are a Go developer. The project is at evaluation/go/:
 
-/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/
   cmd/server/main.go
   internal/store/store.go
   internal/store/store_test.go
@@ -90,7 +91,7 @@ Your task: Add a PATCH /tasks/{id} endpoint that toggles task completion.
 - Write tests
 
 Read the existing code first, then edit the files to implement the feature.
-Run `go test ./...` from the evaluation/go/ directory when done.
+Run `cd evaluation/go && go test ./...` when done.
 ```
 
 **Wait for agent completion.** Note the agent's approach.
@@ -100,13 +101,13 @@ Run `go test ./...` from the evaluation/go/ directory when done.
 After the agent finishes, record what files were created/modified:
 
 ```bash
-cd /Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go && find . -type f -newer go.mod | sort > ../../evaluation/results/red/task-1/files-changed.txt
+find evaluation/go -type f -newer evaluation/go/go.mod | sort > evaluation/results/red/task-1/files-changed.txt
 ```
 
 - [ ] **Step 4: Check for spec artifacts**
 
 ```bash
-ls -la /Users/mervyn/GolandProjects/github/openspec-superpowers-guide/openspec/changes/ 2>/dev/null || echo "NO SPEC ARTIFACTS CREATED" > /Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/results/red/task-1/spec-check.txt
+ls openspec/changes/ 2>/dev/null > evaluation/results/red/task-1/spec-check.txt || echo "NO SPEC ARTIFACTS CREATED" > evaluation/results/red/task-1/spec-check.txt
 ```
 
 - [ ] **Step 5: Record agent approach**
@@ -153,9 +154,8 @@ mv CLAUDE.md CLAUDE.md.disabled
 Agent prompt:
 
 ```
-You are a Go developer. The project is at:
+You are a Go developer. The project is at evaluation/go/:
 
-/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/
   cmd/server/main.go
   internal/store/store.go
   internal/store/store_test.go
@@ -173,21 +173,28 @@ Your task: Add task priority levels (Low, Medium, High).
 - Write tests for all new behavior
 
 Read the existing code first, then edit the files to implement the feature.
-Run `go test ./...` from the evaluation/go/ directory when done.
+Run `cd evaluation/go && go test ./...` when done.
 ```
 
-- [ ] **Step 2: Capture RED evidence**
+- [ ] **Step 3: Capture RED evidence**
 
-Same as Task 2: `files-changed.txt`, `spec-check.txt`, `analysis.md`.
+```bash
+find evaluation/go -type f -newer evaluation/go/go.mod | sort > evaluation/results/red/task-2/files-changed.txt
+ls openspec/changes/ 2>/dev/null > evaluation/results/red/task-2/spec-check.txt || echo "NO SPEC ARTIFACTS CREATED" > evaluation/results/red/task-2/spec-check.txt
+```
 
-- [ ] **Step 4: Revert code changes and restore CLAUDE.md**
+- [ ] **Step 4: Record agent approach**
+
+Write to `evaluation/results/red/task-2/analysis.md` (same template as Task 1).
+
+- [ ] **Step 5: Revert code changes and restore CLAUDE.md**
 
 ```bash
 git checkout -- evaluation/go/
 mv CLAUDE.md.disabled CLAUDE.md
 ```
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add evaluation/results/red/task-2/
@@ -195,6 +202,10 @@ git commit -m "eval: RED phase task 2 (priority levels) without skills"
 ```
 
 ---
+
+### Task 4: GREEN Phase — Task 1 (Toggle Endpoint) With Skills
+
+**Approach:** Dispatch a fresh subagent with the SAME task prompt, but this time the agent runs in the project context which includes `.claude/skills/sdd-workflow/` and `.claude/skills/sdd-review-specs/`. The CLAUDE.md routes new features to `sdd-workflow`.
 
 - [ ] **Step 1: Verify CLAUDE.md is present (restored from RED phase)**
 
@@ -219,22 +230,20 @@ Your task: Add a PATCH /tasks/{id} endpoint to the Go task manager that toggles 
 - Return 404 if task not found
 - Write tests
 
-The project is at /Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/.
-Read the existing code, then implement.
+The project is at evaluation/go/. Read the existing code, then implement.
 
-IMPORTANT: Before writing ANY code, read CLAUDE.md at
-/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/CLAUDE.md
+IMPORTANT: Before writing ANY code, read CLAUDE.md at the project root
 and follow the development workflow it specifies.
 ```
 
-- [ ] **Step 3: Capture GREEN evidence**
+- [ ] **Step 4: Capture GREEN evidence**
 
 ```bash
-cd evaluation/go && find . -type f -newer go.mod | sort > ../../evaluation/results/green/task-1/files-changed.txt
-ls -la openspec/changes/ 2>/dev/null || echo "NO SPEC ARTIFACTS" > ../../evaluation/results/green/task-1/spec-check.txt
+find evaluation/go -type f -newer evaluation/go/go.mod | sort > evaluation/results/green/task-1/files-changed.txt
+ls openspec/changes/ 2>/dev/null > evaluation/results/green/task-1/spec-check.txt || echo "NO SPEC ARTIFACTS" > evaluation/results/green/task-1/spec-check.txt
 ```
 
-- [ ] **Step 4: Record GREEN analysis**
+- [ ] **Step 5: Record GREEN analysis**
 
 Write to `evaluation/results/green/task-1/analysis.md`:
 
@@ -248,7 +257,7 @@ Write to `evaluation/results/green/task-1/analysis.md`:
 **RED comparison:** [What changed from RED?]
 ```
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add evaluation/results/green/task-1/
@@ -261,7 +270,14 @@ git commit -m "eval: GREEN phase task 1 (toggle endpoint) with skills"
 
 Same as Task 4 but for the priority levels feature.
 
-- [ ] **Step 1: Dispatch GREEN agent for Task 2**
+- [ ] **Step 1: Verify CLAUDE.md and skills present**
+
+```bash
+test -f CLAUDE.md || { echo "ERROR: CLAUDE.md is missing"; exit 1; }
+ls .claude/skills/sdd-workflow/SKILL.md .claude/skills/sdd-review-specs/SKILL.md
+```
+
+- [ ] **Step 2: Dispatch GREEN agent for Task 2**
 
 ```
 Your task: Add task priority levels (Low, Medium, High) to the Go task manager.
@@ -271,19 +287,17 @@ Your task: Add task priority levels (Low, Medium, High) to the Go task manager.
 - Support GET /tasks?priority=High filtering
 - Write tests
 
-The project is at /Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/.
-Read existing code first.
+The project is at evaluation/go/. Read existing code first.
 
-IMPORTANT: Before writing ANY code, read CLAUDE.md at
-/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/CLAUDE.md
+IMPORTANT: Before writing ANY code, read CLAUDE.md at the project root
 and follow the development workflow it specifies.
 ```
 
-- [ ] **Step 2: Capture GREEN evidence and analysis**
+- [ ] **Step 3: Capture GREEN evidence and analysis**
 
 Same as Task 4: `files-changed.txt`, `spec-check.txt`, `analysis.md`.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
 git add evaluation/results/green/task-2/
