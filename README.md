@@ -32,6 +32,11 @@ npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-workflow
 npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-review-specs
 ```
 
+或通过 Claude Code plugin 一键安装：
+```bash
+/plugin install https://github.com/9Ashwin/on-my-sdd.git
+```
+
 Skill 源码仓库：[on-my-sdd](https://github.com/9Ashwin/on-my-sdd)
 
 ## 两个核心 Skill
