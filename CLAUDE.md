@@ -7,14 +7,19 @@ SDD skill evaluation workspace — multi-language test apps for skill validation
 ```
 evaluation/
   go/    — Go task manager API (stdlib net/http)
-  py/    — Python (future)
+  py/    — Python task manager API (FastAPI + uvicorn)
 ```
 
 ## Commands
 
+### Go
 - `cd evaluation/go && go test ./...` — Run all tests
 - `cd evaluation/go && go build ./cmd/server/` — Build
 - `cd evaluation/go && go run ./cmd/server/` — Start server on :3000
+
+### Python
+- `cd evaluation/py && uv run pytest test_store.py -v` — Run all tests
+- `cd evaluation/py && uv run python main.py` — Start server on :3000
 
 ## Development Workflow
 

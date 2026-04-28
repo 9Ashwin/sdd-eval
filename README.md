@@ -15,7 +15,7 @@
 │   │   ├── cmd/server/    # HTTP 入口
 │   │   ├── internal/      # store + handler + tests
 │   │   └── go.mod
-│   └── py/                # Python（将来）
+│   └── py/                # Python 评估应用
 ├── openspec/              # SDD 规约存储
 │   ├── specs/             # 永久规约库
 │   └── changes/           # 进行中的变更
@@ -52,7 +52,7 @@ Skill 源码仓库：[on-my-sdd](https://github.com/9Ashwin/on-my-sdd)
 
 ## 快速开始
 
-### 运行 Go 评估应用
+### Go
 
 ```bash
 cd evaluation/go
@@ -60,11 +60,20 @@ go test ./...           # 运行测试
 go run ./cmd/server/    # 启动服务 :3000
 ```
 
+### Python
+
+```bash
+cd evaluation/py
+uv run pytest test_store.py -v   # 运行测试
+uv run python main.py            # 启动服务 :3000
+```
+
 ### API
 
 ```
-GET    /tasks              # 列出所有任务
-POST   /tasks              # 创建任务 {"title": "..."}
+GET    /tasks              # 列出所有任务（支持 ?priority=High 筛选）
+POST   /tasks              # 创建任务 {"title": "...", "priority": "Medium"}
+PATCH  /tasks/{id}         # 切换完成状态 {"done": true}
 DELETE /tasks/{id}         # 删除任务
 ```
 
