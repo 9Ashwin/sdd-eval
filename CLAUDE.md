@@ -1,6 +1,6 @@
-# OpenSpec + Superpowers Guide
+# OpenSpec and Superpowers Guide
 
-Evaluation and demonstration project for the OpenSpec + Superpowers SDD workflow. Multi-language test apps for skill validation.
+Evaluation and demonstration project for the OpenSpec and Superpowers SDD workflow. Multi-language test apps for skill validation.
 
 ## Project Structure
 

@@ -1,4 +1,4 @@
-# OpenSpec + Superpowers Guide
+# OpenSpec and Superpowers Guide
 
 结合 [OpenSpec](https://github.com/Fission-AI/OpenSpec)（规约层）与 [Superpowers](https://github.com/9Ashwin/superpowers)（执行纪律层）的 SDD（Spec-Driven Development）工作流演示与评估项目。
 
