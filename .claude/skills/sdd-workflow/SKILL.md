@@ -78,7 +78,7 @@ Check the file system to determine where you are in the workflow:
 |------------|-------|-------------|
 | No `openspec/` directory | Uninitialized | Run `openspec init` first |
 | `openspec/` exists, no change dir | Ready for proposal | `/opsx:propose <name>` or exploration |
-| `openspec/changes/<name>/` with 4 artifacts, unreviewed | Specs need review | `sdd-review-specs` |
+| `openspec/changes/<name>/` with 4 artifacts, unreviewed | Specs need review | Tier 1: self-review inline (2-5 min). Tier 2: `sdd-review-specs` full gate. Default Tier 2 if unsure. |
 | `openspec/changes/<name>/` with reviewed artifacts | Ready for execution | `superpowers:writing-plans` |
 | `tasks.md` has unchecked items | In progress | `/opsx:apply` + `superpowers:test-driven-development` |
 | All tasks checked, not archived | Ready for delivery | `superpowers:verification-before-completion` → `/opsx:archive` |
@@ -139,9 +139,16 @@ After each phase completes, route to the next:
 ```
 Phase complete → check what's next:
 
-/opsx:propose done      → HARD STOP. Invoke sdd-review-specs. Do NOT proceed to any implementation step
-                           until sdd-review-specs explicitly passes. Self-review via tasks.md checkboxes
-                           is NOT review — the sdd-review-specs gate function (7 steps) must be invoked.
+/opsx:propose done      → DETERMINE TIER, then route:
+  Tier 0 (typo/log/comment)   → skip /opsx:propose entirely — make change and verify directly
+  Tier 1 (single field, config)→ self-review inline: check proposal.md scope boundary
+                                 and tasks.md executability. Skim design.md for obvious
+                                 conflicts with existing architecture. 2-5 min.
+                                 Then proceed to implementation.
+  Tier 2 (new feature, refactor)→ HARD STOP. Invoke sdd-review-specs full gate function.
+                                 Produce review.md. Do NOT proceed until it passes.
+                                 Self-review via tasks.md checkboxes is NOT review for Tier 2.
+  When in doubt, default to Tier 2. Over-reviewing is cheaper than missing a critical issue.
 sdd-review-specs passed → superpowers:writing-plans (refine task granularity)
 writing-plans done      → /opsx:apply + superpowers:test-driven-development (pipeline)
                           OR superpowers:subagent-driven-development (parallel tasks)
