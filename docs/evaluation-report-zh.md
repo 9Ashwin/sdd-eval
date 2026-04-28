@@ -69,6 +69,22 @@ agent 将 tasks.md 的 checkbox 进度跟踪等同于 spec review，未显式调
 
 两个 skill 的组合能可靠地将 AI agent 从"直接写代码"引导到"先规约、审核、再实现"的 SDD 流程。
 
+## REFACTOR：Tier 分级解决慢的问题
+
+**问题：** 评估后反思发现所有 `/opsx:propose` 后一刀切 HARD STOP 调完整 review gate 过于僵化。单字段添加、配置调整等小改动走全流程太慢，参考了 Superpowers 的做法（review 嵌入技能自检，而非独立 gate）。
+
+**改动：** 将 Transition Rules 从一刀切 HARD STOP 改为按 Tier 分级路由：
+
+```
+/opsx:propose done →
+  Tier 0（拼写/日志/注释）→ 不走 /opsx:propose，直接改
+  Tier 1（单字段/配置）  → 自检 proposal 范围 + tasks 可执行性，2-5 分钟
+  Tier 2（新功能/重构）  → HARD STOP，调用 sdd-review-specs 完整 gate，产出 review.md
+  不确定时默认 Tier 2
+```
+
+**评估任务不受影响：** Toggle Endpoint 和 Priority Levels 均属 Tier 2，Tier 2 行为未变，评估结论依然有效。
+
 ## 证据索引
 
 所有原始证据位于 `evaluation/results/`：
