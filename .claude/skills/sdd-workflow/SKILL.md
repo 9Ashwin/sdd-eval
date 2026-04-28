@@ -115,6 +115,8 @@ These thoughts mean STOP — you're rationalizing skipping the SDD process:
 | "Let me check a few files quickly" | That's what `/opsx:explore` does systematically. Use the tool. |
 | "I remember how this codebase works" | Code evolves. Your memory is stale. Read the specs. |
 | "One more task before reviewing" | Review gate exists for a reason. Skipping it accumulates unchecked assumptions. |
+| "The tasks.md checklist IS the review" | tasks.md tracks implementation progress. sdd-review-specs validates scope, design, and completeness. These are different activities — checking boxes is not reviewing specs. The review gate has a 7-step function (identify tier, read artifacts, check against checklist, communicate issues, iterate, declare pass, route). Skipping it is non-compliance. |
+| "I'll review as I implement" | Review-after-implementation finds what you built, not what you need. The gate must be BEFORE code — catching scope and design issues after implementation costs 10x more to fix. |
 | "The real risk is the deadline, not the spec" | Risk inversion. Skipping the spec *is* the deadline risk — unreviewed changes cause the incidents that blow deadlines. |
 | "A minimal proposal is good enough" | Partial compliance is non-compliance. The SDD pipeline produces 4 artifacts for a reason. A proposal without specs/design/tasks is a wish, not a plan. |
 | "Can't spec what I don't understand yet" | That's what `/opsx:explore` is for. Build understanding first, then spec. Never invert the order — code is not exploration. |
@@ -137,7 +139,9 @@ After each phase completes, route to the next:
 ```
 Phase complete → check what's next:
 
-/opsx:propose done      → sdd-review-specs (review the 4 artifacts)
+/opsx:propose done      → HARD STOP. Invoke sdd-review-specs. Do NOT proceed to any implementation step
+                           until sdd-review-specs explicitly passes. Self-review via tasks.md checkboxes
+                           is NOT review — the sdd-review-specs gate function (7 steps) must be invoked.
 sdd-review-specs passed → superpowers:writing-plans (refine task granularity)
 writing-plans done      → /opsx:apply + superpowers:test-driven-development (pipeline)
                           OR superpowers:subagent-driven-development (parallel tasks)

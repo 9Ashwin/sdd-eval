@@ -55,7 +55,9 @@ BEFORE proceeding to any implementation:
 4. FEEDBACK — communicate every issue found, with suggested fix
 5. ITERATE — after AI fixes, re-check affected artifacts
 6. ONLY THEN — declare review passed
-7. ROUTE — to superpowers:writing-plans
+7. PRODUCE review evidence — write review result to openspec/changes/<name>/review.md
+   (minimum: tier chosen, checklist results, issues found/resolved, pass/fail declaration)
+8. ROUTE — to superpowers:writing-plans
 ```
 
 ## Tier 2 Full Review Checklist
@@ -157,11 +159,12 @@ These patterns in AI-generated artifacts mean the spec is NOT ready:
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| "Specs reviewed" | Every checklist item checked, issues documented | "Read through it", "looks fine" |
+| "Specs reviewed" | Every checklist item checked, issues documented, review.md written to change directory | "Read through it", "looks fine" |
 | "Scope is clear" | In/out scope sections are explicit and complete | "I know what they mean" |
 | "Design is solid" | Alternatives documented, decisions justified, risks noted | "The approach makes sense" |
 | "Tasks are executable" | Each task concrete, independently verifiable, correctly ordered | "The list looks complete" |
-| "Ready for implementation" | All red flags resolved, tier-appropriate checklist passed | "Should be good enough" |
+| "Ready for implementation" | All red flags resolved, tier-appropriate checklist passed, review.md present | "Should be good enough" |
+| "Review done — I checked tasks.md boxes" | sdd-review-specs gate function invoked with tier classification and checklist results | Checking off implementation tasks in tasks.md is progress tracking, not spec review |
 
 ## After Review Passes
 
