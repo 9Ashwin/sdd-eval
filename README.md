@@ -25,6 +25,15 @@
         └── plans/         # 实施计划
 ```
 
+## 安装 Skill
+
+```bash
+npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-workflow
+npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-review-specs
+```
+
+Skill 源码仓库：[on-my-sdd](https://github.com/9Ashwin/on-my-sdd)
+
 ## 两个核心 Skill
 
 本项目只定义了两个 SDD skill：
