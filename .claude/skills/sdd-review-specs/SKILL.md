@@ -169,10 +169,11 @@ These patterns in AI-generated artifacts mean the spec is NOT ready:
 ## After Review Passes
 
 ```
-Review passed → invoke superpowers:writing-plans to refine task granularity
+Review passed → invoke superpowers:writing-plans to refine task granularity.
+                Save the implementation plan to openspec/changes/<name>/plan.md.
 ```
 
-**REQUIRED SUB-SKILL:** Use superpowers:writing-plans to convert the reviewed tasks.md into 2-5 minute bite-sized tasks. The reviewed artifacts are now the authoritative spec baseline — writing-plans works from them.
+**REQUIRED SUB-SKILL:** Use superpowers:writing-plans to convert the reviewed tasks.md into 2-5 minute bite-sized tasks. Save output to `openspec/changes/<name>/plan.md` — all artifacts for this change live in one directory. The reviewed artifacts are now the authoritative spec baseline — writing-plans works from them.
 
 ## Why This Matters
 

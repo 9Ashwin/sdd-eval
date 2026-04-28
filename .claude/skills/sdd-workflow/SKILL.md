@@ -79,7 +79,7 @@ Check the file system to determine where you are in the workflow:
 | No `openspec/` directory | Uninitialized | Run `openspec init` first |
 | `openspec/` exists, no change dir | Ready for proposal | `/opsx:propose <name>` or exploration |
 | `openspec/changes/<name>/` with 4 artifacts, unreviewed | Specs need review | Tier 1: self-review inline (2-5 min). Tier 2: `sdd-review-specs` full gate. Default Tier 2 if unsure. |
-| `openspec/changes/<name>/` with reviewed artifacts | Ready for execution | `superpowers:writing-plans` |
+| `openspec/changes/<name>/` with reviewed artifacts | Ready for execution | `superpowers:writing-plans` → save plan to `openspec/changes/<name>/plan.md` |
 | `tasks.md` has unchecked items | In progress | `/opsx:apply` + `superpowers:test-driven-development` |
 | All tasks checked, not archived | Ready for delivery | `superpowers:verification-before-completion` → `/opsx:archive` |
 
@@ -149,7 +149,8 @@ Phase complete → check what's next:
                                  Produce review.md. Do NOT proceed until it passes.
                                  Self-review via tasks.md checkboxes is NOT review for Tier 2.
   When in doubt, default to Tier 2. Over-reviewing is cheaper than missing a critical issue.
-sdd-review-specs passed → superpowers:writing-plans (refine task granularity)
+sdd-review-specs passed → superpowers:writing-plans (refine task granularity).
+                           Save output to openspec/changes/<name>/plan.md.
 writing-plans done      → /opsx:apply + superpowers:test-driven-development (pipeline)
                           OR superpowers:subagent-driven-development (parallel tasks)
                           OR superpowers:executing-plans (batch execution)
