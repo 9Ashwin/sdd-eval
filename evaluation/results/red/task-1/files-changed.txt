@@ -1,0 +1,5 @@
+/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/cmd/server/main.go
+/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/internal/handler/handler.go
+/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/internal/store/store.go
+/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/internal/store/store_test.go
+/Users/mervyn/GolandProjects/github/openspec-superpowers-guide/evaluation/go/server
