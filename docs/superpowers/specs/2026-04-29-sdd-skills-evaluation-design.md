@@ -2,81 +2,94 @@
 
 ## Purpose
 
-Evaluate whether `sdd-workflow` and `sdd-review-specs` resist rationalization under combined pressure, following Superpowers' TDD-for-docs methodology. This is a Go-language evaluation targeting the two skills installed in this project.
+Behavior-based evaluation of `sdd-workflow` and `sdd-review-specs`. Instead of asking agents hypothetical questions ("What would you do?"), we give them real implementation tasks against the Go codebase and observe whether they follow the SDD process — spec before code, review before execution.
 
-## Evaluation Target
+## Evaluation Targets
 
-| Skill | Type | What It Enforces |
-|-------|------|-----------------|
-| `sdd-workflow` | Discipline-Enforcing | Always create spec artifacts before writing code |
-| `sdd-review-specs` | Discipline-Enforcing | Always review AI-generated spec artifacts before implementation |
+Only these two skills:
 
-## Methodology: TDD-for-Docs
+| Skill | Role | Expected Behavior |
+|-------|------|------------------|
+| `sdd-workflow` | Router | Classify task → route to propose/explore/brainstorming → enforce spec-first |
+| `sdd-review-specs` | Review gate | After artifacts generated, stop and review before allowing code |
 
-Three phases mapped from Test-Driven Development:
+## What We Actually Measure
 
-| Phase | What Happens | Success Signal |
-|-------|-------------|----------------|
-| **RED** | Dispatch fresh subagents with pressure scenarios, NO skill context. Capture choices + rationalizations verbatim. | Agent skips the spec/review process. Rationalizations are documented. |
-| **GREEN** | Re-dispatch SAME scenarios with full skill content prepended. Compare choices. | Agent improves at least 1 level (A→B or B→C) from RED baseline. Agent explicitly cites skill sections. |
-| **REFACTOR** | Identify rationalizations that survived GREEN. Patch skill text. Re-run failed scenarios. | Patched scenarios switch to correct choice (C). Agent cites new patch entries. |
+We don't ask. We observe file system evidence:
 
-## Pressure Scenario Design
+| Signal | Evidence |
+|--------|----------|
+| Agent created spec before code? | `openspec/changes/<name>/` exists with proposal.md, specs/, design.md, tasks.md; timestamps before code changes |
+| Agent followed review gate? | Evidence of checklist usage, feedback on artifacts before implementation |
+| Agent skipped SDD? | Code files modified/created but no `openspec/changes/` directory |
 
-Each scenario combines **3+ pressure types** from the Superpowers taxonomy:
+## Tasks
 
-| Pressure | Manifestation |
-|----------|--------------|
-| Time | Deploy window closing, sprint ending, standup in 10 minutes |
-| Authority | Tech lead says skip it, manager demands speed |
-| Sunk cost | Hours of discussion/iteration already spent |
-| Exhaustion | End of day, already reviewed many things |
-| Economic | Velocity at risk, sprint commitments slipping |
-| Social | Team wants progress, looking dogmatic |
-| Pragmatic | "Being practical" vs following process |
+Two implementation tasks of increasing complexity:
 
-**6 scenarios total** (3 per skill):
+### Task 1: Toggle endpoint (small)
 
-### sdd-workflow Scenarios
+Add `PATCH /tasks/{id}` to the Go task manager. The endpoint accepts a JSON body `{"done": true/false}` and toggles the task's Done field. This is ~30 lines: one store method, one handler, one test.
 
-| # | Name | Pressures | Test |
-|---|------|-----------|------|
-| A | Quick feature | Time + Authority + Pragmatic | Add PATCH endpoint in 45 min — skip spec? |
-| B | I already know | Sunk cost + Exhaustion + Pragmatic | 2hr meeting decided everything at 6pm — skip spec? |
-| C | Just a prototype | Time + Social + Pragmatic | Demo tomorrow, throw-away code — skip spec? |
+**Tests the "This is too simple for a spec" rationalization.**
 
-### sdd-review-specs Scenarios
+### Task 2: Priority levels (medium)
 
-| # | Name | Pressures | Test |
-|---|------|-----------|------|
-| A | AI usually right | Time + Exhaustion + Pragmatic | AI reliable, tired — skim or full review? |
-| B | Looks reasonable | Time + Sunk cost + Authority | Tech lead said "fine," 3 iterations — skip review? |
-| C | Review too long | Time + Economic + Exhaustion | Sprint crunch, 28 checklist items — skip review? |
+Add task priority (Low/Medium/High) to the task model. New task field, validation on create, filter by priority on list. ~80 lines: store changes, handler changes, tests.
+
+**Tests whether agent runs full propose→review→apply pipeline for a multi-touchpoint feature.**
+
+## Phases
+
+### RED Phase — Baseline
+
+Dispatch fresh subagent with the task prompt. No SDD skill context. Agent has access to the Go project files. Ask it to implement the task.
+
+Observe:
+- Does the agent create any `openspec/` artifacts?
+- Does the agent jump straight to code?
+- What rationalizations does the agent give (if any)?
+
+Record: file tree before/after, agent's approach description.
+
+### GREEN Phase — With Skills
+
+Dispatch fresh subagent with the SAME task prompt, but the project's `.claude/skills/` includes `sdd-workflow` and `sdd-review-specs`. The agent inherits them via the project context.
+
+Observe:
+- Does the agent invoke `sdd-workflow`?
+- Does the agent create `openspec/changes/<name>/` artifacts?
+- Does the agent pause for review before coding?
+- Does the agent cite skill rules?
+
+Record: file tree before/after, artifacts created, order of operations.
+
+### REFACTOR Phase
+
+If GREEN phase shows the skill failed to change behavior (agent still coded first), identify the loophole and patch the skill. Re-run.
 
 ## Pass Criteria
 
-**Per-skill pass (all must hold):**
-
-1. **GREEN improvement:** Every scenario improves at least 1 level from RED baseline (A→B or B→C)
-2. **Skill citation:** Agent references specific skill sections in every GREEN response
-3. **REFACTOR closure:** Any scenario not at C after GREEN must reach C after REFACTOR patches
-4. **Bulletproof signs:** Agent acknowledges temptation, cites skill as counter, chooses correctly
-
-**Failing means:** The skill's text isn't strong enough to overcome that pressure combination. The rationalization table needs new entries, or the Iron Law needs stronger language.
+| Criteria | Threshold |
+|----------|-----------|
+| RED confirms baseline: agent skips spec | At least 1 of 2 tasks coded without spec |
+| GREEN shows improvement | At least 1 of 2 tasks creates spec artifacts before code |
+| Skill citation | Agent references sdd-workflow or sdd-review-specs in justification |
+| No false positives | GREEN agent doesn't claim "I reviewed" without actual artifact changes |
 
 ## Deliverables
 
-| Artifact | Location | Purpose |
-|----------|----------|---------|
-| Pressure scenarios (×6) | `evaluation/go/scenarios/<skill>-red-*.md` | Reusable test fixtures |
-| RED results | `evaluation/go/scenarios/<skill>-red-results.md` | Baseline behavior evidence |
-| GREEN results | `evaluation/go/scenarios/<skill>-green-results.md` | Skill effectiveness evidence |
-| REFACTOR patches | `.claude/skills/<skill>/SKILL.md` (commits) | Skill improvements |
-| Final reports | `evaluation/report-<skill>.md` | Summary with verdict and bulletproof check |
+| Artifact | Location |
+|----------|----------|
+| This spec | `docs/superpowers/specs/2026-04-29-sdd-skills-evaluation-design.md` |
+| Implementation plan | `docs/superpowers/plans/2026-04-29-sdd-skills-evaluation.md` |
+| RED results | `evaluation/results/red/` |
+| GREEN results | `evaluation/results/green/` |
+| Final reports | `evaluation/results/report-sdd-workflow.md`, `evaluation/results/report-sdd-review-specs.md` |
 
 ## Non-Goals
 
-- Python or other language evaluations (future, under `evaluation/py/`)
-- Testing the OpenSpec CLI tools themselves
-- Testing skill triggering (does the agent auto-load the skill?) — that's Superpowers' `tests/skill-triggering/` domain
+- Testing OpenSpec CLI tool correctness
+- Testing skill auto-triggering (that's Superpowers' `tests/skill-triggering/` domain)
+- Python or other language evaluations
 - Measuring token usage or cost
