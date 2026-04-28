@@ -25,3 +25,7 @@ evaluation/
 | Bug with unclear cause | `@systematic-debugging` |
 
 `sdd-workflow` handles classification, routing, and all phase transitions internally.
+
+## Reference
+
+- [SDD Workflow Guide (中文)](docs/guide-zh.md) — full methodology, tool matrix, red flags
