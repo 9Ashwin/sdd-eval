@@ -110,11 +110,14 @@ These thoughts mean STOP — you're rationalizing skipping the SDD process:
 | "The spec is in the conversation history" | Conversation history evaporates. Files persist. Write it down. |
 | "I already know what to build" | Knowing ≠ having it reviewed. Specs are the agreement, not the idea. |
 | "Specs slow me down" | Rework from misaligned expectations is slower. Align first, execute second. |
-| "This is just a prototype" | Prototypes become production. Spec now saves migration pain later. |
+| "This is just a prototype" | Prototypes become production. Spec now saves migration pain later. "Prototype" is a scope label in proposal.md — it doesn't exempt you from writing specs/, design.md, and tasks.md. |
 | "I'll just explore the codebase first" | Use `/opsx:explore` — structured exploration with output. Don't browse aimlessly. |
 | "Let me check a few files quickly" | That's what `/opsx:explore` does systematically. Use the tool. |
 | "I remember how this codebase works" | Code evolves. Your memory is stale. Read the specs. |
 | "One more task before reviewing" | Review gate exists for a reason. Skipping it accumulates unchecked assumptions. |
+| "The real risk is the deadline, not the spec" | Risk inversion. Skipping the spec *is* the deadline risk — unreviewed changes cause the incidents that blow deadlines. |
+| "A minimal proposal is good enough" | Partial compliance is non-compliance. The SDD pipeline produces 4 artifacts for a reason. A proposal without specs/design/tasks is a wish, not a plan. |
+| "Can't spec what I don't understand yet" | That's what `/opsx:explore` is for. Build understanding first, then spec. Never invert the order — code is not exploration. |
 
 **All of these mean: follow the SDD process. No shortcuts.**
 

@@ -148,6 +148,8 @@ These patterns in AI-generated artifacts mean the spec is NOT ready:
 | "Review takes too long" | Rework from unreviewed specs takes longer. |
 | "I already reviewed it during brainstorming" | Brainstorming explores. Propose formalizes. They're different artifacts. |
 | "The tests will catch spec issues" | Tests verify implementation, not design quality. Wrong design + passing tests = wrong product. |
+| "A targeted partial review is honest pragmatism" | Partial review is partial compliance. The tier exists for a reason — if it's Tier 2 by classification, Tier 1 review is insufficient regardless of how "honest" it feels. |
+| "Full review when tired is performative" | Fatigue degrades thoroughness, but skipping review entirely guarantees zero thoroughness. If you're too tired to review properly, defer the review — don't rationalize a skim as equivalent. |
 
 **All of these mean: do the review. Follow the checklist.**
 
