@@ -8,8 +8,7 @@
 ├── CLAUDE.md              # 项目配置，路由新功能到 sdd-workflow
 ├── AGENTS.md → CLAUDE.md  # 软链接，无需手动同步
 ├── .claude/skills/
-│   ├── sdd-workflow/      # SDD 路由器 skill
-│   └── sdd-review-specs/  # 规约审核 gate skill
+│   └── sdd-workflow/      # SDD 路由 skill（含 review 参考）
 ├── evaluation/            # 评估目标应用（按语言组织）
 │   ├── go/                # Go 评估应用
 │   │   ├── cmd/server/    # HTTP 入口
@@ -29,7 +28,6 @@
 
 ```bash
 npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-workflow
-npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-review-specs
 ```
 
 或通过 Claude Code plugin 一键安装：
@@ -39,16 +37,13 @@ npx skills add https://github.com/9Ashwin/on-my-sdd.git --skill sdd-review-specs
 
 Skill 源码仓库：[on-my-sdd](https://github.com/9Ashwin/on-my-sdd)
 
-## 两个核心 Skill
-
-本项目只定义了两个 SDD skill：
+## 核心 Skill
 
 | Skill | 职责 | 何时触发 |
 |-------|------|---------|
-| `sdd-workflow` | 分类请求、检测项目阶段、路由到正确的规约或执行工具 | 任何超出单行修复的开发任务 |
-| `sdd-review-specs` | 审查 AI 生成的四大件（proposal/specs/design/tasks），设定审核深度（Tier 0/1/2） | `/opsx:propose` 生成规约后 |
+| `sdd-workflow` | 分类请求、Boundedness Check、路由到探索/头脑风暴/OpenSpec；审核逻辑见 `reference/sdd-review-specs.md` | 任何超出单行修复的开发任务 |
 
-`sdd-workflow` 内部处理完整的 SDD 管道，CLAUDE.md 只需一行引用。
+`sdd-workflow` 处理完整 SDD 管道：分类 → 探索/头脑风暴 → 规范 → 审核 → 计划 → 实现 → 归档。CLAUDE.md 只需一行引用。
 
 ## 快速开始
 
