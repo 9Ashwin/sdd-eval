@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "sdd-review-specs": {
+      "source": "9Ashwin/on-my-sdd",
+      "sourceType": "github",
+      "skillPath": "skills/sdd-review-specs/SKILL.md",
+      "computedHash": "b4927ac525746f935fed17f8603d8b89665aa2fd5fc02354c6872d0597a202f6"
+    },
+    "sdd-workflow": {
+      "source": "9Ashwin/on-my-sdd",
+      "sourceType": "github",
+      "skillPath": "skills/sdd-workflow/SKILL.md",
+      "computedHash": "e46a39d9938fa1ee4f58d0285e6fc1281c1054d8d93ed167a253e1bcb8ea5d05"
+    }
+  }
+}

@@ -46,3 +46,31 @@ func (s *Store) Delete(id int) bool {
 	}
 	return false
 }
+
+func (s *Store) GetByID(id int) (Task, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for _, t := range s.tasks {
+		if t.ID == id {
+			return t, true
+		}
+	}
+	return Task{}, false
+}
+
+func (s *Store) Update(id int, title *string, done *bool) (Task, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for i, t := range s.tasks {
+		if t.ID == id {
+			if title != nil {
+				s.tasks[i].Title = *title
+			}
+			if done != nil {
+				s.tasks[i].Done = *done
+			}
+			return s.tasks[i], true
+		}
+	}
+	return Task{}, false
+}
